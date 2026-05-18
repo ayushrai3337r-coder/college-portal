@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maharashtra College Portal — BSc & MSc</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #111111;
+    --white: #ffffff;
+    --off: #f7f7f7;
+    --gray: #e8e8e8;
+    --mid: #888;
+    --accent: #1a1a1a;
+    --border: #ddd;
+    --radius: 10px;
+    --shadow: 0 2px 16px rgba(0,0,0,0.08);
+    --transition: 0.22s cubic-bezier(.4,0,.2,1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--white);
+    color: var(--black);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--black);
+    color: var(--white);
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  }
+  header .logo {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  header .logo span {
+    display: inline-block;
+    background: var(--white);
+    color: var(--black);
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+  }
+  header .year-badge {
+    font-size: 0.78rem;
+    color: #aaa;
+    font-weight: 500;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--off);
+    border-bottom: 1px solid var(--border);
+    padding: 36px 20px 28px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: clamp(1.4rem, 5vw, 2.2rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .hero p {
+    color: var(--mid);
+    font-size: 0.95rem;
+    margin-top: 8px;
+    max-width: 480px;
+    margin-inline: auto;
+  }
+  .hero .tags {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .hero .tags span {
+    background: var(--black);
+    color: var(--white);
+    font-size: 0.72rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main { max-width: 900px; margin: 0 auto; padding: 28px 16px 60px; }
+
+  /* ── SECTION TITLES ── */
+  .section-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── DEGREE GRID ── */
+  .degree-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  .degree-btn {
+    background: var(--white);
+    border: 2px solid var(--black);
+    border-radius: var(--radius);
+    padding: 22px 20px;
+    cursor: pointer;
+    text-align: left;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .degree-btn:hover, .degree-btn.active {
+    background: var(--black);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .degree-btn .icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    line-height: 1;
+    margin-top: 2px;
+  }
+  .degree-btn .info .name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    display: block;
+  }
+  .degree-btn .info .sub {
+    font-size: 0.78rem;
+    opacity: 0.6;
+    margin-top: 2px;
+    display: block;
+  }
+  .degree-btn .info .sems {
+    font-size: 0.72rem;
+    font-weight: 600;
+    opacity: 0.5;
+    margin-top: 6px;
+    display: block;
+    letter-spacing: 0.04em;
+  }
+  .degree-btn.active .info .sub,
+  .degree-btn.active .info .sems { opacity: 0.7; }
+
+  /* ── PANEL ── */
+  .panel {
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .panel.open { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ── BREADCRUMB ── */
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: var(--mid);
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .breadcrumb .crumb {
+    cursor: pointer;
+    color: var(--black);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .breadcrumb .sep { color: var(--border); }
+
+  /* ── SEMESTER TABS ── */
+  .sem-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .sem-tab {
+    padding: 10px 22px;
+    border: 2px solid var(--black);
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    background: var(--white);
+    transition: var(--transition);
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+  }
+  .sem-tab:hover, .sem-tab.active {
+    background: var(--black);
+    color: var(--white);
+  }
+
+  /* ── SEM CONTENT ── */
+  .sem-panel { display: none; animation: fadeIn 0.25s ease; }
+  .sem-panel.open { display: block; }
+
+  /* ── INFO CARDS ── */
+  .info-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .info-card {
+    background: var(--off);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .info-card .label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mid);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .info-card .value {
+    font-size: 1rem;
+    font-weight: 800;
+    display: block;
+  }
+
+  /* ── TIMETABLE ── */
+  .timetable-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    min-width: 480px;
+  }
+  thead tr { background: var(--black); color: var(--white); }
+  thead th {
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:nth-child(even) { background: var(--off); }
+  tbody td { padding: 9px 12px; }
+  tbody td:first-child { font-weight: 600; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .badge-theory { background: #eee; color: #333; }
+  .badge-practical { background: #111; color: #fff; }
+  .badge-both { background: #555; color: #fff; }
+
+  /* ── SUBJECTS BLOCK ── */
+  .subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .subject-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    background: var(--white);
+    position: relative;
+  }
+  .subject-card .s-num {
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--mid);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .subject-card .s-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .subject-card .s-topics {
+    font-size: 0.78rem;
+    color: #555;
+    line-height: 1.5;
+  }
+  .subject-card .s-marks {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--mid);
+    margin-top: 8px;
+    display: block;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── SECTION BLOCKS ── */
+  .block-title {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .block-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── EXAM PATTERN BOX ── */
+  .exam-box {
+    background: var(--off);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-bottom: 24px;
+  }
+  .exam-box ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .exam-box ul li {
+    font-size: 0.82rem;
+    padding: 8px 12px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-weight: 500;
+  }
+  .exam-box ul li strong { font-weight: 800; display: block; }
+
+  /* ── BACK BTN ── */
+  .back-btn {
+    background: none;
+    border: 2px solid var(--black);
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-bottom: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .back-btn:hover { background: var(--black); color: var(--white); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    color: #aaa;
+    text-align: center;
+    font-size: 0.78rem;
+    padding: 20px;
+    margin-top: 40px;
+  }
+  footer strong { color: var(--white); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 500px) {
+    .degree-grid { grid-template-columns: 1fr 1fr; }
+    .degree-btn { padding: 16px 12px; gap: 8px; }
+    .degree-btn .icon { font-size: 1.4rem; }
+    .degree-btn .info .name { font-size: 0.9rem; }
+    main { padding: 20px 12px 50px; }
+    .sem-tab { padding: 9px 14px; font-size: 0.82rem; }
+  }
+  @media (max-width: 380px) {
+    .degree-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span>MH</span> College Portal
+  </div>
+  <div class="year-badge">2025–2027</div>
+</header>
+
+<div class="hero">
+  <h1>Maharashtra<br>Degree Program Guide</h1>
+  <p>Semester-wise syllabus, exam timetable &amp; pattern for BSc and MSc — Maharashtra University</p>
+  <div class="tags">
+    <span>Mumbai University</span>
+    <span>BAMU</span>
+    <span>SPPU Pune</span>
+    <span>CBCS / NEP 2020</span>
+    <span>2025–27</span>
+  </div>
+</div>
+
+<main>
+  <!-- HOME VIEW -->
+  <div id="home-view">
+    <div class="section-title">Select Your Degree Program</div>
+    <div class="degree-grid">
+
+      <button class="degree-btn" onclick="openDegree('msc1')">
+        <div class="icon">🎓</div>
+        <div class="info">
+          <span class="name">MSc First Year</span>
+          <span class="sub">Master of Science — Year 1</span>
+          <span class="sems">Semester I &amp; II</span>
+        </div>
+      </button>
+
+      <button class="degree-btn" onclick="openDegree('msc2')">
+        <div class="icon">🎓</div>
+        <div class="info">
+          <span class="name">MSc Second Year</span>
+          <span class="sub">Master of Science — Year 2</span>
+          <span class="sems">Semester III &amp; IV</span>
+        </div>
+      </button>
+
+      <button class="degree-btn" onclick="openDegree('bsc1')">
+        <div class="icon">📘</div>
+        <div class="info">
+          <span class="name">BSc First Year</span>
+          <span class="sub">Bachelor of Science — Year 1</span>
+          <span class="sems">Semester I &amp; II</span>
+        </div>
+      </button>
+
+      <button class="degree-btn" onclick="openDegree('bsc2')">
+        <div class="icon">📗</div>
+        <div class="info">
+          <span class="name">BSc Second Year</span>
+          <span class="sub">Bachelor of Science — Year 2</span>
+          <span class="sems">Semester III &amp; IV</span>
+        </div>
+      </button>
+
+      <button class="degree-btn" onclick="openDegree('bsc3')">
+        <div class="icon">📙</div>
+        <div class="info">
+          <span class="name">BSc Third Year</span>
+          <span class="sub">Bachelor of Science — Year 3</span>
+          <span class="sems">Semester V &amp; VI</span>
+        </div>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- DEGREE PANELS -->
+
+  <!-- =============================== BSc YEAR 1 =============================== -->
+  <div class="panel" id="panel-bsc1">
+    <button class="back-btn" onclick="goHome()">← Back</button>
+    <div class="breadcrumb">
+      <span class="crumb" onclick="goHome()">Home</span>
+      <span class="sep">›</span>
+      <span>BSc First Year</span>
+    </div>
+    <div class="section-title">BSc First Year — Choose Semester</div>
+    <div class="sem-tabs">
+      <div class="sem-tab active" onclick="switchSem('bsc1', 1, this)">Semester I</div>
+      <div class="sem-tab" onclick="switchSem('bsc1', 2, this)">Semester II</div>
+    </div>
+
+    <!-- BSc1 Sem1 -->
+    <div class="sem-panel open" id="bsc1-sem1">
+      <div class="info-row">
+        <div class="info-card"><span class="label">Year</span><span class="value">2025–26</span></div>
+        <div class="info-card"><span class="label">Semester</span><span class="value">I (Oct–Nov)</span></div>
+        <div class="info-card"><span class="label">Total Papers</span><span class="value">6</span></div>
+        <div class="info-card"><span class="label">Max Marks</span><span class="value">600</span></div>
+      </div>
+
+      <div class="block-title">Exam Timetable (Oct–Nov 2025)</div>
+      <div class="timetable-wrap">
+        <table>
+          <thead><tr><th>Paper</th><th>Subject</th><th>Date</th><th>Time</th><th>Marks</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td>Paper I</td><td>English / Communication Skills</td><td>20 Oct 2025</td><td>10:30 AM</td><td>100</td><td><span class="badge badge-theory">Theory</span></td></tr>
+            <tr><td>Paper II</td><td>Mathematics / Statistics - I</td><td>22 Oct 2025</td><td>10:30 AM</td><td>100</td><td><span class="badge badge-theory">Theory</span></td></tr>
+            <tr><td>Paper III</td><td>Physics - I</td><td>24 Oct 2025</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper IV</td><td>Chemistry - I</td><td>27 Oct 2025</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper V</td><td>Biology / Computer Science - I</td><td>29 Oct 2025</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper VI</td><td>Foundation Course / EVS</td><td>31 Oct 2025</td><td>10:30 AM</td><td>100</td><td><span class="badge badge-theory">Theory</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="block-title">Subjects &amp; Syllabus</div>
+      <div class="subjects-grid">
+        <div class="subject-card">
+          <span class="s-num">Paper I</span>
+          <span class="s-name">English / Communication</span>
+          <span class="s-topics">Unit 1: Prose &amp; Comprehension · Unit 2: Grammar &amp; Writing · Unit 3: Vocabulary · Unit 4: Letter/Report Writing · Unit 5: Communication Skills</span>
+          <span class="s-marks">100 Marks · 3 Hrs · No Practical</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Paper II</span>
+          <span class="s-name">Mathematics / Statistics - I</span>
+          <span class="s-topics">Unit 1: Sets &amp; Functions · Unit 2: Algebra · Unit 3: Trigonometry · Unit 4: Co-ordinate Geometry · Unit 5: Calculus - Differentiation</span>
+          <span class="s-marks">100 Marks · 3 Hrs</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Paper III</span>
+          <span class="s-name">Physics - I</span>
+          <span class="s-topics">Unit 1: Units &amp; Measurements · Unit 2: Mechanics · Unit 3: Oscillations &amp; Waves · Unit 4: Properties of Matter · Unit 5: Thermal Physics</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Paper IV</span>
+          <span class="s-name">Chemistry - I</span>
+          <span class="s-topics">Unit 1: Atomic Structure · Unit 2: Chemical Bonding · Unit 3: s-block Elements · Unit 4: States of Matter · Unit 5: Basic Organic Chemistry</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Paper V</span>
+          <span class="s-name">Biology / Computer Science - I</span>
+          <span class="s-topics">Bio: Cell Biology, Classification of Life, Genetics intro, Ecology · CS: Introduction to Computers, MS Office, Internet Basics, HTML Intro</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Paper VI</span>
+          <span class="s-name">Foundation Course / EVS</span>
+          <span class="s-topics">Unit 1: Indian Constitution · Unit 2: Human Rights · Unit 3: Environment &amp; Biodiversity · Unit 4: Disaster Management · Unit 5: Science &amp; Society</span>
+          <span class="s-marks">100 Marks · Internal 40 + External 60</span>
+        </div>
+      </div>
+
+      <div class="block-title">Exam Pattern</div>
+      <div class="exam-box">
+        <p style="font-size:0.83rem;">Theory papers follow Maharashtra University CBCS / NEP 2020 pattern:</p>
+        <ul>
+          <li><strong>Q1</strong> MCQs — 20 marks (2 marks each)</li>
+          <li><strong>Q2</strong> Short notes — 16 marks (4 × 4)</li>
+          <li><strong>Q3–Q5</strong> Long answers — 24 marks (3 × 8, attempt 3 of 5)</li>
+          <li><strong>Passing</strong> Min 36% in theory + 36% in practical separately</li>
+          <li><strong>Duration</strong> 3 hours per paper</li>
+          <li><strong>Practical</strong> Internal 10 + Journal 5 + Viva 5 = 20</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- BSc1 Sem2 -->
+    <div class="sem-panel" id="bsc1-sem2">
+      <div class="info-row">
+        <div class="info-card"><span class="label">Year</span><span class="value">2025–26</span></div>
+        <div class="info-card"><span class="label">Semester</span><span class="value">II (Mar–Apr)</span></div>
+        <div class="info-card"><span class="label">Total Papers</span><span class="value">6</span></div>
+        <div class="info-card"><span class="label">Max Marks</span><span class="value">600</span></div>
+      </div>
+
+      <div class="block-title">Exam Timetable (March–April 2026)</div>
+      <div class="timetable-wrap">
+        <table>
+          <thead><tr><th>Paper</th><th>Subject</th><th>Date</th><th>Time</th><th>Marks</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td>Paper I</td><td>English / Communication Skills - II</td><td>10 Mar 2026</td><td>10:30 AM</td><td>100</td><td><span class="badge badge-theory">Theory</span></td></tr>
+            <tr><td>Paper II</td><td>Mathematics / Statistics - II</td><td>12 Mar 2026</td><td>10:30 AM</td><td>100</td><td><span class="badge badge-theory">Theory</span></td></tr>
+            <tr><td>Paper III</td><td>Physics - II</td><td>14 Mar 2026</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper IV</td><td>Chemistry - II</td><td>17 Mar 2026</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper V</td><td>Biology / Computer Science - II</td><td>19 Mar 2026</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper VI</td><td>Skill Enhancement / Elective</td><td>21 Mar 2026</td><td>10:30 AM</td><td>100</td><td><span class="badge badge-theory">Theory</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="block-title">Subjects &amp; Syllabus</div>
+      <div class="subjects-grid">
+        <div class="subject-card">
+          <span class="s-num">Paper I</span>
+          <span class="s-name">English / Communication - II</span>
+          <span class="s-topics">Unit 1: Drama &amp; Poetry · Unit 2: Technical Writing · Unit 3: Group Discussion Skills · Unit 4: Resume &amp; SOP · Unit 5: Presentation Skills</span>
+          <span class="s-marks">100 Marks · 3 Hrs</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Paper II</span>
+          <span class="s-name">Mathematics / Statistics - II</span>
+          <span class="s-topics">Unit 1: Integral Calculus · Unit 2: Differential Equations · Unit 3: Vectors · Unit 4: Probability Theory · Unit 5: Numerical Methods</span>
+          <span class="s-marks">100 Marks · 3 Hrs</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Paper III</span>
+          <span class="s-name">Physics - II</span>
+          <span class="s-topics">Unit 1: Optics · Unit 2: Electromagnetism · Unit 3: Modern Physics · Unit 4: Semiconductor Devices · Unit 5: Nuclear Physics Intro</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Paper IV</span>
+          <span class="s-name">Chemistry - II</span>
+          <span class="s-topics">Unit 1: p-block Elements · Unit 2: Chemical Equilibrium · Unit 3: Electrochemistry · Unit 4: Carbonyl Compounds · Unit 5: Polymers</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Paper V</span>
+          <span class="s-name">Biology / Computer Science - II</span>
+          <span class="s-topics">Bio: Photosynthesis, Respiration, Plant Physiology, Microbiology · CS: C Programming, Data Structures Intro, DBMS Basics, Python Intro</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Paper VI</span>
+          <span class="s-name">Skill Enhancement / Elective</span>
+          <span class="s-topics">Options: Web Designing · Financial Literacy · Data Analysis · Soft Skills Development · Entrepreneurship Basics</span>
+          <span class="s-marks">100 Marks · Internal 40 + External 60</span>
+        </div>
+      </div>
+
+      <div class="block-title">Exam Pattern</div>
+      <div class="exam-box">
+        <ul>
+          <li><strong>Q1</strong> MCQs — 20 marks</li>
+          <li><strong>Q2</strong> Short notes — 16 marks</li>
+          <li><strong>Q3–Q5</strong> Long answers — 24 marks</li>
+          <li><strong>Passing</strong> Min 36% overall + 36% practical</li>
+          <li><strong>Duration</strong> 3 hours per paper</li>
+          <li><strong>ATKT</strong> Allowed up to 4 papers from Sem I</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================== BSc YEAR 2 =============================== -->
+  <div class="panel" id="panel-bsc2">
+    <button class="back-btn" onclick="goHome()">← Back</button>
+    <div class="breadcrumb">
+      <span class="crumb" onclick="goHome()">Home</span>
+      <span class="sep">›</span>
+      <span>BSc Second Year</span>
+    </div>
+    <div class="section-title">BSc Second Year — Choose Semester</div>
+    <div class="sem-tabs">
+      <div class="sem-tab active" onclick="switchSem('bsc2', 3, this)">Semester III</div>
+      <div class="sem-tab" onclick="switchSem('bsc2', 4, this)">Semester IV</div>
+    </div>
+
+    <!-- BSc2 Sem3 -->
+    <div class="sem-panel open" id="bsc2-sem3">
+      <div class="info-row">
+        <div class="info-card"><span class="label">Year</span><span class="value">2026–27</span></div>
+        <div class="info-card"><span class="label">Semester</span><span class="value">III (Oct–Nov)</span></div>
+        <div class="info-card"><span class="label">Total Papers</span><span class="value">6</span></div>
+        <div class="info-card"><span class="label">Max Marks</span><span class="value">600</span></div>
+      </div>
+
+      <div class="block-title">Exam Timetable (Oct–Nov 2026)</div>
+      <div class="timetable-wrap">
+        <table>
+          <thead><tr><th>Paper</th><th>Subject</th><th>Date</th><th>Time</th><th>Marks</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td>Paper I</td><td>Core Subject A - III</td><td>5 Nov 2026</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper II</td><td>Core Subject B - III</td><td>7 Nov 2026</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper III</td><td>Core Subject C - III</td><td>10 Nov 2026</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper IV</td><td>Applied Component - I</td><td>12 Nov 2026</td><td>10:30 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper V</td><td>Elective / Vocational</td><td>14 Nov 2026</td><td>10:30 AM</td><td>100</td><td><span class="badge badge-theory">Theory</span></td></tr>
+            <tr><td>Paper VI</td><td>Skill Enhancement Course</td><td>16 Nov 2026</td><td>10:30 AM</td><td>100</td><td><span class="badge badge-theory">Theory</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="block-title">Subjects &amp; Syllabus (Physics Stream Sample)</div>
+      <div class="subjects-grid">
+        <div class="subject-card">
+          <span class="s-num">Physics III</span>
+          <span class="s-name">Electricity &amp; Magnetism</span>
+          <span class="s-topics">Unit 1: Electric Field &amp; Gauss Law · Unit 2: Magnetic Field &amp; Biot-Savart · Unit 3: Electromagnetic Induction · Unit 4: Maxwell's Equations · Unit 5: AC Circuits</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Chemistry III</span>
+          <span class="s-name">Physical Chemistry</span>
+          <span class="s-topics">Unit 1: Chemical Thermodynamics · Unit 2: Phase Equilibria · Unit 3: Chemical Kinetics · Unit 4: Surface Chemistry · Unit 5: Photochemistry</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Mathematics III</span>
+          <span class="s-name">Multivariable Calculus</span>
+          <span class="s-topics">Unit 1: Partial Differentiation · Unit 2: Multiple Integrals · Unit 3: Vector Calculus · Unit 4: Complex Numbers · Unit 5: Fourier Series</span>
+          <span class="s-marks">80 Marks · 3 Hrs</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">CS III</span>
+          <span class="s-name">Data Structures &amp; Algorithms</span>
+          <span class="s-topics">Unit 1: Arrays, Stacks, Queues · Unit 2: Linked Lists · Unit 3: Trees &amp; Graphs · Unit 4: Sorting &amp; Searching · Unit 5: Algorithm Complexity</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Applied Component</span>
+          <span class="s-name">Industrial Chemistry / IT Applications</span>
+          <span class="s-topics">Depending on stream: Industrial processes / Web Tech / Environmental Applications / Biostatistics</span>
+          <span class="s-marks">Theory 70 + Practical 30 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Skill Enhancement</span>
+          <span class="s-name">Research Methodology</span>
+          <span class="s-topics">Unit 1: Types of Research · Unit 2: Literature Review · Unit 3: Data Collection · Unit 4: Statistical Analysis · Unit 5: Report Writing</span>
+          <span class="s-marks">100 Marks · Internal + External</span>
+        </div>
+      </div>
+
+      <div class="block-title">Exam Pattern</div>
+      <div class="exam-box">
+        <ul>
+          <li><strong>Theory</strong> 60 marks — 3 hrs</li>
+          <li><strong>Practical</strong> 20 marks per paper</li>
+          <li><strong>MCQ</strong> 15 marks in theory</li>
+          <li><strong>Short Q</strong> 15 marks</li>
+          <li><strong>Long Q</strong> 30 marks (attempt 3 of 5)</li>
+          <li><strong>Passing</strong> 36% in theory + 36% in practical</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- BSc2 Sem4 -->
+    <div class="sem-panel" id="bsc2-sem4">
+      <div class="info-row">
+        <div class="info-card"><span class="label">Year</span><span class="value">2026–27</span></div>
+        <div class="info-card"><span class="label">Semester</span><span class="value">IV (Mar–Apr)</span></div>
+        <div class="info-card"><span class="label">Total Papers</span><span class="value">6</span></div>
+        <div class="info-card"><span class="label">Max Marks</span><span class="value">600</span></div>
+      </div>
+
+      <div class="block-title">Exam Timetable (March–April 2027)</div>
+      <div class="timetable-wrap">
+        <table>
+          <thead><tr><th>Paper</th><th>Subject</th><th>Date</th><th>Time</th><th>Marks</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td>Paper I</td><td>Core Subject A - IV</td><td>5 Mar 2027</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper II</td><td>Core Subject B - IV</td><td>8 Mar 2027</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper III</td><td>Core Subject C - IV</td><td>11 Mar 2027</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper IV</td><td>Applied Component - II</td><td>14 Mar 2027</td><td>10:30 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper V</td><td>Elective / Vocational - II</td><td>17 Mar 2027</td><td>10:30 AM</td><td>100</td><td><span class="badge badge-theory">Theory</span></td></tr>
+            <tr><td>Paper VI</td><td>Project / Seminar</td><td>20 Mar 2027</td><td>10:30 AM</td><td>100</td><td><span class="badge badge-practical">Project</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="block-title">Subjects &amp; Syllabus</div>
+      <div class="subjects-grid">
+        <div class="subject-card">
+          <span class="s-num">Physics IV</span>
+          <span class="s-name">Quantum Mechanics Intro</span>
+          <span class="s-topics">Unit 1: Wave-Particle Duality · Unit 2: Schrödinger Equation · Unit 3: Particle in a Box · Unit 4: Hydrogen Atom · Unit 5: Quantum Numbers</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Chemistry IV</span>
+          <span class="s-name">Organic Chemistry II</span>
+          <span class="s-topics">Unit 1: Aromatic Compounds · Unit 2: Stereochemistry · Unit 3: Amines &amp; Dyes · Unit 4: Carbohydrates · Unit 5: Amino Acids &amp; Proteins</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Mathematics IV</span>
+          <span class="s-name">Abstract Algebra &amp; Number Theory</span>
+          <span class="s-topics">Unit 1: Groups &amp; Subgroups · Unit 2: Rings &amp; Fields · Unit 3: Number Theory · Unit 4: Linear Transformations · Unit 5: Metric Spaces</span>
+          <span class="s-marks">80 Marks · 3 Hrs</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">CS IV</span>
+          <span class="s-name">Database Management Systems</span>
+          <span class="s-topics">Unit 1: ER Model · Unit 2: Relational Algebra · Unit 3: SQL Queries · Unit 4: Normalization · Unit 5: Transaction Management</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Applied Component</span>
+          <span class="s-name">Analytical Techniques / IoT</span>
+          <span class="s-topics">Instrumental Methods of Analysis OR Internet of Things Applications depending on specialization</span>
+          <span class="s-marks">Theory 70 + Practical 30 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Project / Seminar</span>
+          <span class="s-name">Minor Research Project</span>
+          <span class="s-topics">Topic selection → Literature review → Methodology → Data collection → Analysis → Report submission + Viva voce</span>
+          <span class="s-marks">Internal 50 + Viva 50 = 100 Marks</span>
+        </div>
+      </div>
+
+      <div class="block-title">Exam Pattern</div>
+      <div class="exam-box">
+        <ul>
+          <li><strong>Theory</strong> 60 marks — 3 hrs</li>
+          <li><strong>Practical</strong> 20 marks per paper</li>
+          <li><strong>Project</strong> Continuous evaluation</li>
+          <li><strong>ATKT</strong> Max 4 papers carry-over allowed</li>
+          <li><strong>Passing</strong> 36% each component</li>
+          <li><strong>Grade</strong> O, A+, A, B+, B, C, D (CGPA)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================== BSc YEAR 3 =============================== -->
+  <div class="panel" id="panel-bsc3">
+    <button class="back-btn" onclick="goHome()">← Back</button>
+    <div class="breadcrumb">
+      <span class="crumb" onclick="goHome()">Home</span>
+      <span class="sep">›</span>
+      <span>BSc Third Year</span>
+    </div>
+    <div class="section-title">BSc Third Year — Choose Semester</div>
+    <div class="sem-tabs">
+      <div class="sem-tab active" onclick="switchSem('bsc3', 5, this)">Semester V</div>
+      <div class="sem-tab" onclick="switchSem('bsc3', 6, this)">Semester VI</div>
+    </div>
+
+    <!-- BSc3 Sem5 -->
+    <div class="sem-panel open" id="bsc3-sem5">
+      <div class="info-row">
+        <div class="info-card"><span class="label">Year</span><span class="value">2027–28</span></div>
+        <div class="info-card"><span class="label">Semester</span><span class="value">V (Oct–Nov)</span></div>
+        <div class="info-card"><span class="label">Total Papers</span><span class="value">6</span></div>
+        <div class="info-card"><span class="label">Max Marks</span><span class="value">700</span></div>
+      </div>
+
+      <div class="block-title">Exam Timetable (Oct–Nov 2027)</div>
+      <div class="timetable-wrap">
+        <table>
+          <thead><tr><th>Paper</th><th>Subject</th><th>Date</th><th>Time</th><th>Marks</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td>Paper I</td><td>Core A - V (Advanced)</td><td>3 Nov 2027</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper II</td><td>Core B - V (Advanced)</td><td>6 Nov 2027</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper III</td><td>Core C - V (Advanced)</td><td>9 Nov 2027</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper IV</td><td>Elective Discipline A</td><td>12 Nov 2027</td><td>10:30 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper V</td><td>Elective Discipline B</td><td>15 Nov 2027</td><td>10:30 AM</td><td>100</td><td><span class="badge badge-theory">Theory</span></td></tr>
+            <tr><td>Paper VI</td><td>Industrial Training / Internship</td><td>18 Nov 2027</td><td>—</td><td>100</td><td><span class="badge badge-practical">Field</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="block-title">Subjects &amp; Syllabus</div>
+      <div class="subjects-grid">
+        <div class="subject-card">
+          <span class="s-num">Physics V</span>
+          <span class="s-name">Nuclear &amp; Particle Physics</span>
+          <span class="s-topics">Unit 1: Nuclear Structure · Unit 2: Radioactivity · Unit 3: Nuclear Reactions · Unit 4: Particle Physics · Unit 5: Detectors &amp; Accelerators</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Chemistry V</span>
+          <span class="s-name">Inorganic Chemistry III</span>
+          <span class="s-topics">Unit 1: Coordination Chemistry · Unit 2: Crystal Field Theory · Unit 3: Transition Metals · Unit 4: Lanthanides &amp; Actinides · Unit 5: Bioinorganic Chemistry</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Mathematics V</span>
+          <span class="s-name">Real Analysis</span>
+          <span class="s-topics">Unit 1: Real Number System · Unit 2: Sequences &amp; Series · Unit 3: Continuity · Unit 4: Differentiability · Unit 5: Riemann Integration</span>
+          <span class="s-marks">80 Marks · 3 Hrs</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">CS V</span>
+          <span class="s-name">Operating Systems &amp; Networks</span>
+          <span class="s-topics">Unit 1: OS Concepts · Unit 2: Process Management · Unit 3: Memory Management · Unit 4: File Systems · Unit 5: Network Layers &amp; Protocols</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Elective A</span>
+          <span class="s-name">Instrumentation / AI Basics / Ecology</span>
+          <span class="s-topics">Choose based on specialization: Advanced Lab Techniques · Machine Learning Introduction · Environmental Biology</span>
+          <span class="s-marks">Theory 70 + Practical 30 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Internship</span>
+          <span class="s-name">Industrial / Research Internship</span>
+          <span class="s-topics">Minimum 30 days industry/lab attachment · Daily log maintained · Final report + presentation · Evaluated by external examiner</span>
+          <span class="s-marks">Report 50 + Viva 50 = 100 Marks</span>
+        </div>
+      </div>
+
+      <div class="block-title">Exam Pattern</div>
+      <div class="exam-box">
+        <ul>
+          <li><strong>Theory</strong> 60 marks — 3 hrs per paper</li>
+          <li><strong>Practical</strong> 20–30 marks per paper</li>
+          <li><strong>Internship</strong> Graded continuous assessment</li>
+          <li><strong>Passing</strong> 40% in each paper (TY BSc)</li>
+          <li><strong>Classification</strong> Distinction ≥70%, 1st ≥60%, 2nd ≥50%</li>
+          <li><strong>CGPA</strong> O=10, A+=9, A=8, B+=7...</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- BSc3 Sem6 -->
+    <div class="sem-panel" id="bsc3-sem6">
+      <div class="info-row">
+        <div class="info-card"><span class="label">Year</span><span class="value">2027–28</span></div>
+        <div class="info-card"><span class="label">Semester</span><span class="value">VI (Mar–Apr)</span></div>
+        <div class="info-card"><span class="label">Total Papers</span><span class="value">6</span></div>
+        <div class="info-card"><span class="label">Max Marks</span><span class="value">700</span></div>
+      </div>
+
+      <div class="block-title">Exam Timetable (March–April 2028)</div>
+      <div class="timetable-wrap">
+        <table>
+          <thead><tr><th>Paper</th><th>Subject</th><th>Date</th><th>Time</th><th>Marks</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td>Paper I</td><td>Core A - VI (Specialization)</td><td>5 Mar 2028</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper II</td><td>Core B - VI (Specialization)</td><td>8 Mar 2028</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper III</td><td>Core C - VI (Specialization)</td><td>11 Mar 2028</td><td>10:30 AM</td><td>80</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper IV</td><td>Advanced Elective</td><td>14 Mar 2028</td><td>10:30 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>Paper V</td><td>Dissertation / Major Project</td><td>17 Mar 2028</td><td>—</td><td>150</td><td><span class="badge badge-practical">Project</span></td></tr>
+            <tr><td>Paper VI</td><td>Comprehensive Viva</td><td>20 Mar 2028</td><td>10:30 AM</td><td>100</td><td><span class="badge badge-practical">Viva</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="block-title">Subjects &amp; Syllabus</div>
+      <div class="subjects-grid">
+        <div class="subject-card">
+          <span class="s-num">Physics VI</span>
+          <span class="s-name">Solid State Physics</span>
+          <span class="s-topics">Unit 1: Crystal Structure · Unit 2: Band Theory · Unit 3: Semiconductors · Unit 4: Superconductivity · Unit 5: Magnetic Properties of Solids</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Chemistry VI</span>
+          <span class="s-name">Spectroscopy</span>
+          <span class="s-topics">Unit 1: UV-Visible Spectroscopy · Unit 2: IR Spectroscopy · Unit 3: NMR Spectroscopy · Unit 4: Mass Spectrometry · Unit 5: Chromatography</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Mathematics VI</span>
+          <span class="s-name">Complex Analysis &amp; Operations Research</span>
+          <span class="s-topics">Unit 1: Complex Functions · Unit 2: Cauchy's Theorem · Unit 3: Laurent Series · Unit 4: Linear Programming · Unit 5: Game Theory</span>
+          <span class="s-marks">80 Marks · 3 Hrs</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">CS VI</span>
+          <span class="s-name">Software Engineering &amp; Web Tech</span>
+          <span class="s-topics">Unit 1: SDLC Models · Unit 2: Agile Methodology · Unit 3: Testing Techniques · Unit 4: React/Angular Intro · Unit 5: Cloud Computing Basics</span>
+          <span class="s-marks">Theory 60 + Practical 20 = 80 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Major Project</span>
+          <span class="s-name">BSc Final Year Dissertation</span>
+          <span class="s-topics">Independent research project under faculty guide · Synopsis approval → Literature review → Experiment/Development → Results → Report → Viva</span>
+          <span class="s-marks">Internal 75 + External Viva 75 = 150 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">Comprehensive Viva</span>
+          <span class="s-name">Final Exit Viva Voce</span>
+          <span class="s-topics">Questions from all 6 semesters · Practical competencies tested · Panel of 3 examiners · Duration: 20–30 minutes per student</span>
+          <span class="s-marks">100 Marks — External Examiner</span>
+        </div>
+      </div>
+
+      <div class="block-title">Exam Pattern &amp; Classification</div>
+      <div class="exam-box">
+        <ul>
+          <li><strong>Pass %</strong> 40% in each paper separately</li>
+          <li><strong>Distinction</strong> ≥ 70% aggregate</li>
+          <li><strong>First Class</strong> 60%–69%</li>
+          <li><strong>Second Class</strong> 50%–59%</li>
+          <li><strong>Pass Class</strong> 40%–49%</li>
+          <li><strong>Degree</strong> BSc awarded by Maharashtra University</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================== MSc YEAR 1 =============================== -->
+  <div class="panel" id="panel-msc1">
+    <button class="back-btn" onclick="goHome()">← Back</button>
+    <div class="breadcrumb">
+      <span class="crumb" onclick="goHome()">Home</span>
+      <span class="sep">›</span>
+      <span>MSc First Year</span>
+    </div>
+    <div class="section-title">MSc First Year — Choose Semester</div>
+    <div class="sem-tabs">
+      <div class="sem-tab active" onclick="switchSem('msc1', 1, this)">Semester I</div>
+      <div class="sem-tab" onclick="switchSem('msc1', 2, this)">Semester II</div>
+    </div>
+
+    <!-- MSc1 Sem1 -->
+    <div class="sem-panel open" id="msc1-sem1">
+      <div class="info-row">
+        <div class="info-card"><span class="label">Level</span><span class="value">PG — MSc</span></div>
+        <div class="info-card"><span class="label">Semester</span><span class="value">I (Aug–Dec)</span></div>
+        <div class="info-card"><span class="label">Total Papers</span><span class="value">5+1</span></div>
+        <div class="info-card"><span class="label">Max Marks</span><span class="value">700</span></div>
+      </div>
+
+      <div class="block-title">Exam Timetable (Nov–Dec 2025)</div>
+      <div class="timetable-wrap">
+        <table>
+          <thead><tr><th>Paper</th><th>Subject</th><th>Date</th><th>Time</th><th>Marks</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td>CC-101</td><td>Advanced Core Paper I</td><td>10 Nov 2025</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>CC-102</td><td>Advanced Core Paper II</td><td>13 Nov 2025</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>CC-103</td><td>Advanced Core Paper III</td><td>16 Nov 2025</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>CC-104</td><td>Research Methodology</td><td>19 Nov 2025</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-theory">Theory</span></td></tr>
+            <tr><td>EC-101</td><td>Elective / Specialization Paper</td><td>22 Nov 2025</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>PR-101</td><td>Practical / Lab Work</td><td>25 Nov 2025</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-practical">Practical</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="block-title">Subjects &amp; Syllabus (Chemistry Stream Sample)</div>
+      <div class="subjects-grid">
+        <div class="subject-card">
+          <span class="s-num">CC-101</span>
+          <span class="s-name">Advanced Inorganic Chemistry</span>
+          <span class="s-topics">Unit 1: Symmetry &amp; Group Theory · Unit 2: Advanced Coordination Chemistry · Unit 3: Organometallic Chemistry · Unit 4: Bioinorganic Chemistry · Unit 5: Solid State Chemistry</span>
+          <span class="s-marks">Theory 70 + Practical 30 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">CC-102</span>
+          <span class="s-name">Advanced Organic Chemistry</span>
+          <span class="s-topics">Unit 1: Stereochemistry &amp; Conformations · Unit 2: Reaction Mechanisms · Unit 3: Pericyclic Reactions · Unit 4: Heterocyclic Chemistry · Unit 5: Natural Product Chemistry</span>
+          <span class="s-marks">Theory 70 + Practical 30 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">CC-103</span>
+          <span class="s-name">Advanced Physical Chemistry</span>
+          <span class="s-topics">Unit 1: Quantum Chemistry · Unit 2: Statistical Thermodynamics · Unit 3: Molecular Spectroscopy · Unit 4: Chemical Kinetics (Advanced) · Unit 5: Electrochemistry</span>
+          <span class="s-marks">Theory 70 + Practical 30 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">CC-104</span>
+          <span class="s-name">Research Methodology</span>
+          <span class="s-topics">Unit 1: Research Design · Unit 2: Statistical Tools (SPSS/R) · Unit 3: Spectroscopic Methods · Unit 4: Chromatographic Techniques · Unit 5: Scientific Writing &amp; IPR</span>
+          <span class="s-marks">100 Marks — Theory Only</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">EC-101</span>
+          <span class="s-name">Analytical / Medicinal / Industrial Chemistry</span>
+          <span class="s-topics">Advanced Instrumental Analysis: AAS, ICP, GC-MS, HPLC, XRD, SEM-EDX · OR Drug Design &amp; Development · OR Industrial Processes</span>
+          <span class="s-marks">Theory 70 + Practical 30 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">PR-101</span>
+          <span class="s-name">Practical - I (Lab Work)</span>
+          <span class="s-topics">Synthesis experiments · Instrumental analysis · Computational exercises · Seminar presentation · Lab journal submission</span>
+          <span class="s-marks">Continuous Assessment 100 Marks</span>
+        </div>
+      </div>
+
+      <div class="block-title">Exam Pattern</div>
+      <div class="exam-box">
+        <ul>
+          <li><strong>Theory</strong> 70 marks — 3 hrs</li>
+          <li><strong>Practical</strong> 30 marks per paper</li>
+          <li><strong>MCQ</strong> 20 marks (in theory paper)</li>
+          <li><strong>Short Q</strong> 20 marks</li>
+          <li><strong>Long Q</strong> 30 marks (attempt 3 of 5)</li>
+          <li><strong>Passing</strong> 50% aggregate + 50% practical separately (PG Level)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- MSc1 Sem2 -->
+    <div class="sem-panel" id="msc1-sem2">
+      <div class="info-row">
+        <div class="info-card"><span class="label">Level</span><span class="value">PG — MSc</span></div>
+        <div class="info-card"><span class="label">Semester</span><span class="value">II (Jan–May)</span></div>
+        <div class="info-card"><span class="label">Total Papers</span><span class="value">5+1</span></div>
+        <div class="info-card"><span class="label">Max Marks</span><span class="value">700</span></div>
+      </div>
+
+      <div class="block-title">Exam Timetable (April–May 2026)</div>
+      <div class="timetable-wrap">
+        <table>
+          <thead><tr><th>Paper</th><th>Subject</th><th>Date</th><th>Time</th><th>Marks</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td>CC-201</td><td>Advanced Core Paper IV</td><td>6 Apr 2026</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>CC-202</td><td>Advanced Core Paper V</td><td>9 Apr 2026</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>CC-203</td><td>Computational Methods / IT in Science</td><td>12 Apr 2026</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>CC-204</td><td>Seminar / Technical Writing</td><td>15 Apr 2026</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-practical">Internal</span></td></tr>
+            <tr><td>EC-201</td><td>Elective II / Interdisciplinary</td><td>18 Apr 2026</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>PR-201</td><td>Practical - II + Mini Project</td><td>21 Apr 2026</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-practical">Practical</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="block-title">Subjects &amp; Syllabus</div>
+      <div class="subjects-grid">
+        <div class="subject-card">
+          <span class="s-num">CC-201</span>
+          <span class="s-name">Polymer &amp; Supramolecular Chemistry</span>
+          <span class="s-topics">Unit 1: Polymer Structure · Unit 2: Polymerization Mechanisms · Unit 3: Polymer Properties · Unit 4: Host-Guest Chemistry · Unit 5: Green Chemistry</span>
+          <span class="s-marks">Theory 70 + Practical 30 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">CC-202</span>
+          <span class="s-name">Environmental Chemistry</span>
+          <span class="s-topics">Unit 1: Atmosphere Chemistry · Unit 2: Water Pollution &amp; Treatment · Unit 3: Soil Chemistry · Unit 4: Hazardous Waste · Unit 5: Toxicology</span>
+          <span class="s-marks">Theory 70 + Practical 30 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">CC-203</span>
+          <span class="s-name">Computational Chemistry / Bioinformatics</span>
+          <span class="s-topics">Unit 1: Molecular Modelling · Unit 2: DFT Calculations · Unit 3: Python for Science · Unit 4: Sequence Analysis · Unit 5: Drug Docking</span>
+          <span class="s-marks">Theory 50 + Lab 50 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">CC-204</span>
+          <span class="s-name">Seminar &amp; Technical Writing</span>
+          <span class="s-topics">Literature review presentation · Paper writing · Research proposal · Poster presentation · Internal evaluation by faculty panel</span>
+          <span class="s-marks">100 Marks — Internal Assessment</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">EC-201</span>
+          <span class="s-name">Food / Pharmaceutical / Nanoscience</span>
+          <span class="s-topics">Choose: Food Chemistry &amp; Safety · Pharmaceutical Synthesis · Nanomaterials &amp; Nanotechnology · Forensic Chemistry</span>
+          <span class="s-marks">Theory 70 + Practical 30 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">PR-201</span>
+          <span class="s-name">Practical-II + Mini Project</span>
+          <span class="s-topics">Advanced synthesis · Spectral data interpretation · Mini research project (4 weeks) · Interim report submission · Panel evaluation</span>
+          <span class="s-marks">Practical 50 + Project 50 = 100 Marks</span>
+        </div>
+      </div>
+
+      <div class="block-title">Exam Pattern</div>
+      <div class="exam-box">
+        <ul>
+          <li><strong>Theory</strong> 70 marks — 3 hrs</li>
+          <li><strong>Practical</strong> 30 marks per paper</li>
+          <li><strong>Seminar</strong> Internal grading by department</li>
+          <li><strong>ATKT</strong> Max 2 papers carry-over (PG rules)</li>
+          <li><strong>Passing</strong> 50% in theory + 50% in practical</li>
+          <li><strong>Grade</strong> O=10, A+=9, A=8, B+=7 CGPA</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================== MSc YEAR 2 =============================== -->
+  <div class="panel" id="panel-msc2">
+    <button class="back-btn" onclick="goHome()">← Back</button>
+    <div class="breadcrumb">
+      <span class="crumb" onclick="goHome()">Home</span>
+      <span class="sep">›</span>
+      <span>MSc Second Year</span>
+    </div>
+    <div class="section-title">MSc Second Year — Choose Semester</div>
+    <div class="sem-tabs">
+      <div class="sem-tab active" onclick="switchSem('msc2', 3, this)">Semester III</div>
+      <div class="sem-tab" onclick="switchSem('msc2', 4, this)">Semester IV</div>
+    </div>
+
+    <!-- MSc2 Sem3 -->
+    <div class="sem-panel open" id="msc2-sem3">
+      <div class="info-row">
+        <div class="info-card"><span class="label">Level</span><span class="value">PG — MSc</span></div>
+        <div class="info-card"><span class="label">Semester</span><span class="value">III (Aug–Dec)</span></div>
+        <div class="info-card"><span class="label">Total Papers</span><span class="value">5+1</span></div>
+        <div class="info-card"><span class="label">Max Marks</span><span class="value">800</span></div>
+      </div>
+
+      <div class="block-title">Exam Timetable (Nov–Dec 2026)</div>
+      <div class="timetable-wrap">
+        <table>
+          <thead><tr><th>Paper</th><th>Subject</th><th>Date</th><th>Time</th><th>Marks</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td>CC-301</td><td>Advanced Specialization I</td><td>9 Nov 2026</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>CC-302</td><td>Advanced Specialization II</td><td>12 Nov 2026</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>CC-303</td><td>Advanced Specialization III</td><td>15 Nov 2026</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>EC-301</td><td>Elective III (Advanced)</td><td>18 Nov 2026</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>EC-302</td><td>Open Elective / Interdisciplinary</td><td>21 Nov 2026</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-theory">Theory</span></td></tr>
+            <tr><td>DS-301</td><td>Dissertation Phase I</td><td>Continuous</td><td>—</td><td>200</td><td><span class="badge badge-practical">Research</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="block-title">Subjects &amp; Syllabus</div>
+      <div class="subjects-grid">
+        <div class="subject-card">
+          <span class="s-num">CC-301</span>
+          <span class="s-name">Advanced Spectroscopy</span>
+          <span class="s-topics">Unit 1: 2D NMR Techniques · Unit 2: ESR Spectroscopy · Unit 3: Mossbauer &amp; X-ray Techniques · Unit 4: Laser Spectroscopy · Unit 5: Spectral Interpretation Problems</span>
+          <span class="s-marks">Theory 70 + Practical 30 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">CC-302</span>
+          <span class="s-name">Biochemistry &amp; Molecular Biology</span>
+          <span class="s-topics">Unit 1: Enzymology · Unit 2: Metabolism (Advanced) · Unit 3: DNA Replication &amp; Repair · Unit 4: Gene Expression · Unit 5: Recombinant DNA Technology</span>
+          <span class="s-marks">Theory 70 + Practical 30 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">CC-303</span>
+          <span class="s-name">Materials Science</span>
+          <span class="s-topics">Unit 1: Crystal Chemistry · Unit 2: Electronic Materials · Unit 3: Biomaterials · Unit 4: Composite Materials · Unit 5: Thin Films &amp; Coatings</span>
+          <span class="s-marks">Theory 70 + Practical 30 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">EC-301</span>
+          <span class="s-name">Drug Discovery / AI in Science</span>
+          <span class="s-topics">Rational Drug Design · QSAR Models · Machine Learning in Chemistry · Virtual Screening · ADMET Prediction</span>
+          <span class="s-marks">Theory 70 + Practical 30 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">EC-302</span>
+          <span class="s-name">Science Communication / IPR</span>
+          <span class="s-topics">Patent Law · Technology Transfer · Science Journalism · Grant Writing · Startup Ecosystem for Scientists</span>
+          <span class="s-marks">100 Marks — Theory Only</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">DS-301</span>
+          <span class="s-name">Dissertation Phase I</span>
+          <span class="s-topics">Research problem identification · Guide allocation · Literature survey (50+ papers) · Experimental setup · Synopsis submission · 6-monthly progress report</span>
+          <span class="s-marks">Phase I: 200 Marks (Internal evaluation)</span>
+        </div>
+      </div>
+
+      <div class="block-title">Exam Pattern</div>
+      <div class="exam-box">
+        <ul>
+          <li><strong>Theory</strong> 70 marks — 3 hrs</li>
+          <li><strong>Practical</strong> 30 marks per paper</li>
+          <li><strong>Dissertation</strong> Phase I progress evaluation</li>
+          <li><strong>Passing</strong> 50% each component</li>
+          <li><strong>ATKT</strong> Not allowed in final year (Sem III &amp; IV linked)</li>
+          <li><strong>CGPA</strong> Cumulative from all 4 semesters</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- MSc2 Sem4 -->
+    <div class="sem-panel" id="msc2-sem4">
+      <div class="info-row">
+        <div class="info-card"><span class="label">Level</span><span class="value">PG — MSc</span></div>
+        <div class="info-card"><span class="label">Semester</span><span class="value">IV (Jan–May)</span></div>
+        <div class="info-card"><span class="label">Total Papers</span><span class="value">4+Thesis</span></div>
+        <div class="info-card"><span class="label">Max Marks</span><span class="value">900</span></div>
+      </div>
+
+      <div class="block-title">Exam Timetable (April–May 2027)</div>
+      <div class="timetable-wrap">
+        <table>
+          <thead><tr><th>Paper</th><th>Subject</th><th>Date</th><th>Time</th><th>Marks</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td>CC-401</td><td>Advanced Specialization IV</td><td>5 Apr 2027</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>CC-402</td><td>Advanced Specialization V</td><td>8 Apr 2027</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>EC-401</td><td>Elective IV (Industry Oriented)</td><td>11 Apr 2027</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-both">Th+Prac</span></td></tr>
+            <tr><td>EC-402</td><td>Advanced Elective V</td><td>14 Apr 2027</td><td>10:00 AM</td><td>100</td><td><span class="badge badge-theory">Theory</span></td></tr>
+            <tr><td>DS-401</td><td>Dissertation Phase II + Thesis</td><td>Apr–May 2027</td><td>—</td><td>300</td><td><span class="badge badge-practical">Thesis</span></td></tr>
+            <tr><td>VV-401</td><td>Open Viva Voce</td><td>May 2027</td><td>—</td><td>100</td><td><span class="badge badge-practical">Viva</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="block-title">Subjects &amp; Syllabus</div>
+      <div class="subjects-grid">
+        <div class="subject-card">
+          <span class="s-num">CC-401</span>
+          <span class="s-name">Industrial Chemistry / Biotech Application</span>
+          <span class="s-topics">Unit 1: Industrial Processes · Unit 2: Catalysis in Industry · Unit 3: Fermentation Technology · Unit 4: Waste Management · Unit 5: Scale-up Processes</span>
+          <span class="s-marks">Theory 70 + Practical 30 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">CC-402</span>
+          <span class="s-name">Advanced Analytical Techniques</span>
+          <span class="s-topics">Unit 1: Hyphenated Techniques (LC-MS, GC-MS) · Unit 2: Elemental Analysis · Unit 3: Thermal Analysis · Unit 4: Electroanalytical Methods · Unit 5: Remote Sensing</span>
+          <span class="s-marks">Theory 70 + Practical 30 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">EC-401</span>
+          <span class="s-name">Cosmetics / Agrochemicals / Forensics</span>
+          <span class="s-topics">Choose one specialization: Cosmetic Formulation Science · Pesticide Chemistry · Forensic Analysis Techniques · Polymer Additives</span>
+          <span class="s-marks">Theory 70 + Practical 30 = 100 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">EC-402</span>
+          <span class="s-name">Entrepreneurship / Science Policy</span>
+          <span class="s-topics">Science startups · Technology commercialization · Indian S&amp;T policy · Funding agencies (DST, DBT, CSIR) · Career pathways after MSc</span>
+          <span class="s-marks">100 Marks — Theory Only</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">DS-401</span>
+          <span class="s-name">MSc Dissertation (Final)</span>
+          <span class="s-topics">Complete original research work · Minimum 40 pages thesis · Results &amp; Discussion chapter · Submitted in university format · Evaluated by external examiner from recognized university</span>
+          <span class="s-marks">Thesis 150 + External Viva 150 = 300 Marks</span>
+        </div>
+        <div class="subject-card">
+          <span class="s-num">VV-401</span>
+          <span class="s-name">Open Viva Voce</span>
+          <span class="s-topics">Public defense of thesis · Panel: Guide + External + HOD · Duration: 30–45 minutes · Questions from entire MSc curriculum + thesis work</span>
+          <span class="s-marks">100 Marks — External Examination</span>
+        </div>
+      </div>
+
+      <div class="block-title">Final Classification (MSc)</div>
+      <div class="exam-box">
+        <ul>
+          <li><strong>Pass</strong> 50% aggregate in all 4 semesters</li>
+          <li><strong>Second Class</strong> 50%–59.99%</li>
+          <li><strong>First Class</strong> 60%–69.99%</li>
+          <li><strong>Distinction</strong> 70% and above</li>
+          <li><strong>Thesis</strong> Must be submitted before results</li>
+          <li><strong>Degree</strong> MSc awarded by Maharashtra University</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <strong>Maharashtra College Portal</strong> — BSc &amp; MSc Academic Guide<br>
+  Based on Mumbai University / BAMU / SPPU syllabus structure · NEP 2020 / CBCS Pattern · Academic Year 2025–2027<br>
+  <span style="font-size:0.72rem;opacity:0.6;margin-top:4px;display:block;">This portal is for reference. Always verify with your official university / college notice board.</span>
+</footer>
+
+<script>
+  function openDegree(id) {
+    document.getElementById('home-view').style.display = 'none';
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('open'));
+    document.getElementById('panel-' + id).classList.add('open');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function goHome() {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('open'));
+    document.getElementById('home-view').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function switchSem(degree, semNum, tabEl) {
+    // Remove active from all tabs in this panel
+    const panel = document.getElementById('panel-' + degree);
+    panel.querySelectorAll('.sem-tab').forEach(t => t.classList.remove('active'));
+    tabEl.classList.add('active');
+
+    // Hide all sem-panels in this degree panel
+    panel.querySelectorAll('.sem-panel').forEach(s => s.classList.remove('open'));
+
+    // Show correct sem panel
+    const target = document.getElementById(degree + '-sem' + semNum);
+    if (target) target.classList.add('open');
+  }
+</script>
+
+</body>
+</html>
