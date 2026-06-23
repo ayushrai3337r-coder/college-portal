@@ -1,0 +1,19 @@
+name: sppu_syllabus_portal
+description: SPPU Syllabus Portal for BSc and MSc students
+
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  webview_flutter: ^4.4.2
+  connectivity_plus: ^5.0.2
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
