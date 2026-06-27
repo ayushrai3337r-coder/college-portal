@@ -1,0 +1,22 @@
+{
+  "name": "SPPU Syllabus Portal",
+  "short_name": "SPPU Portal",
+  "description": "BSc MSc Electronics Syllabus & Timetable",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FF6600",
+  "theme_color": "#FF6600",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://ui-avatars.com/api/?name=SPPU&size=192&background=FF6600&color=fff",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://ui-avatars.com/api/?name=SPPU&size=512&background=FF6600&color=fff",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
