@@ -3,7 +3,7 @@
   "short_name": "SPPU Portal",
   "description": "BSc MSc Electronics Syllabus & Timetable",
   "start_url": "/",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#FF6600",
   "theme_color": "#FF6600",
   "orientation": "portrait",
@@ -20,3 +20,5 @@
     }
   ]
 }
+
+
