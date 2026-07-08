@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "app.vercel.mhbscmsc.twa",
+    "sha256_cert_fingerprints": ["E3:C2:3A:A7:31:67:95:12:68:5C:D5:A1:31:22:37:87:0E:12:98:BE:15:15:9C:5E:48:0B:0F:07:CB:F1:4E:EF"]
+  }
+}]
