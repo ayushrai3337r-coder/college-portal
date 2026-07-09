@@ -3,6 +3,6 @@
   "target": {
     "namespace": "android_app",
     "package_name": "app.vercel.mhbscmsc.twa",
-    "sha256_cert_fingerprints": ["E3:C2:3A:A7:31:67:95:12:68:5C:D5:A1:31:22:37:87:0E:12:98:BE:15:15:9C:5E:48:0B:0F:07:CB:F1:4E:EF"]
+    "sha256_cert_fingerprints": ["88:23:35:8D:C9:9E:30:D3:F8:7B:6A:B7:55:75:F8:AE:6F:BC:9A:37:33:8E:62:12:B5:DC:00:22:69:E6:A1:1F"]
   }
 }]
